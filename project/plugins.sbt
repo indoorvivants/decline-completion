@@ -22,5 +22,5 @@ addSbtPlugin("org.scala-js" % "sbt-scalajs" % "1.18.2")
 addSbtPlugin("org.scala-native" % "sbt-scala-native" % "0.5.7")
 
 addSbtPlugin(
-  "com.indoorvivants.snapshots" % "sbt-snapshots" % "0.0.10+1-82872d9b-SNAPSHOT"
+  "com.indoorvivants.snapshots" % "sbt-snapshots" % "0.0.11"
 )
