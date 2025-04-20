@@ -27,7 +27,6 @@ inThisBuild(
 // https://github.com/cb372/sbt-explicit-dependencies/issues/27
 lazy val disableDependencyChecks = Seq(
   unusedCompileDependenciesTest := {},
-  missinglinkCheck := {},
   undeclaredCompileDependenciesTest := {}
 )
 
@@ -102,8 +101,7 @@ val CICommands = Seq(
   s"scalafix --check $scalafixRules",
   "headerCheck",
   "undeclaredCompileDependenciesTest",
-  "unusedCompileDependenciesTest",
-  "missinglinkCheck"
+  "unusedCompileDependenciesTest"
 ).mkString(";")
 
 val PrepareCICommands = Seq(

@@ -3,8 +3,6 @@ addSbtPlugin("com.github.sbt" % "sbt-ci-release" % "1.9.3")
 addSbtPlugin("com.eed3si9n" % "sbt-projectmatrix" % "0.11.0")
 
 // Code quality
-addSbtPlugin("ch.epfl.scala" % "sbt-missinglink" % "0.3.6")
-
 addSbtPlugin("com.github.cb372" % "sbt-explicit-dependencies" % "0.3.1")
 
 addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.5.2")
@@ -23,4 +21,6 @@ addSbtPlugin("org.scala-js" % "sbt-scalajs" % "1.18.2")
 
 addSbtPlugin("org.scala-native" % "sbt-scala-native" % "0.5.7")
 
-addSbtPlugin("com.indoorvivants.snapshots" % "sbt-snapshots" % "0.0.10")
+addSbtPlugin(
+  "com.indoorvivants.snapshots" % "sbt-snapshots" % "0.0.10+1-82872d9b-SNAPSHOT"
+)
