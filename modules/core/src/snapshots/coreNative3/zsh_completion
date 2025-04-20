@@ -1,0 +1,29 @@
+autoload bashcompinit
+bashcompinit
+
+_binary()
+{
+local cmds=(${COMP_WORDS[@]//-*}) # Filter out any flags or options
+local cur
+if [[ "$SHELL" =~ ".*zsh" ]]; then
+  cur=$COMP_CWORD
+else
+  cur=`_get_cword`
+fi
+if [[ "${cmds[0]}" = "binary" && "${cmds[1]}" = "multiply" ]]; then
+  COMPREPLY=( $(compgen -W '--help --verbose' -- "$cur"))
+  return
+fi
+
+if [[ "${cmds[0]}" = "binary" && "${cmds[1]}" = "add" ]]; then
+  COMPREPLY=( $(compgen -W '--help --verbose --extra-flag -e' -- "$cur"))
+  return
+fi
+
+if [[ "${cmds[0]}" = "binary" ]]; then
+  COMPREPLY=( $(compgen -W '--help multiply add' -- "$cur"))
+  return
+fi
+
+}
+complete -F _binary binary

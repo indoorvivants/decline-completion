@@ -5,20 +5,20 @@ Global / excludeLintKeys += scalaJSLinkerConfig
 inThisBuild(
   List(
     organization := "com.indoorvivants",
-    organizationName := "Anton Sviridov",
+    organizationName := "Andi Miller and contributors",
     homepage := Some(
-      url("https://github.com/indoorvivants/scala-library-template")
+      url("https://github.com/indoorvivants/decline-completion")
     ),
-    startYear := Some(2020),
+    startYear := Some(2023),
     licenses := List(
       "Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")
     ),
     developers := List(
       Developer(
-        "keynmol",
-        "Anton Sviridov",
-        "keynmol@gmail.com",
-        url("https://blog.indoorvivants.com")
+        id = "andimiller",
+        name = "Andi Miller",
+        email = "andi@andimiller.net",
+        url = url("http://andimiller.net")
       )
     )
   )
@@ -31,40 +31,44 @@ lazy val disableDependencyChecks = Seq(
   undeclaredCompileDependenciesTest := {}
 )
 
-val Scala213 = "2.13.15"
-val Scala212 = "2.12.20"
-val Scala3 = "3.3.4"
-val scalaVersions = Seq(Scala3, Scala212, Scala213)
+val Scala213 = "2.13.16"
+val Scala3 = "3.3.5"
+val scalaVersions = Seq(Scala3, Scala213)
 
 lazy val munitSettings = Seq(
   libraryDependencies += {
-    "org.scalameta" %%% "munit" % "1.0.3" % Test
+    "org.scalameta" %%% "munit" % "1.1.0" % Test
   },
   testFrameworks += new TestFramework("munit.Framework")
 )
 
-lazy val root = project.aggregate(core.projectRefs*)
+lazy val root = project
+  .aggregate(core.projectRefs*)
+  .settings(publish / skip := true, publishLocal / skip := true)
 
 lazy val core = projectMatrix
   .in(file("modules/core"))
   .settings(
-    name := "core"
+    name := "decline-completion",
+    libraryDependencies ++= Seq(
+      "com.monovore" %%% "decline" % "2.5.0",
+      "org.typelevel" %% "cats-core" % "2.12.0",
+      "org.typelevel" %% "cats-kernel" % "2.12.0"
+    )
   )
   .settings(munitSettings)
   .jvmPlatform(scalaVersions)
   .jsPlatform(scalaVersions, disableDependencyChecks)
   .nativePlatform(scalaVersions, disableDependencyChecks)
-  .enablePlugins(BuildInfoPlugin)
   .settings(
-    buildInfoPackage := "com.indoorvivants.library.internal",
-    buildInfoKeys := Seq[BuildInfoKey](
-      version,
-      scalaVersion,
-      scalaBinaryVersion
-    ),
     scalaJSUseMainModuleInitializer := true,
     scalaJSLinkerConfig ~= (_.withModuleKind(ModuleKind.CommonJSModule))
   )
+  .settings(
+    snapshotsPackageName := "net.andimiller.decline.completion",
+    snapshotsIntegrations += SnapshotIntegration.MUnit // if using MUnit
+  )
+  .enablePlugins(SnapshotsPlugin)
 
 lazy val docs = project
   .in(file("myproject-docs"))
@@ -103,6 +107,7 @@ val CICommands = Seq(
 ).mkString(";")
 
 val PrepareCICommands = Seq(
+  "scalafixEnable",
   s"scalafix --rules $scalafixRules",
   "scalafmtAll",
   "scalafmtSbt",
